@@ -7,8 +7,6 @@
 import random
 import time
 
-card_suit = ["diamond", "club", "heart", "spade"]
-
 print("Welcome to blackjack and hookers!")
 num_of_players = int(input("How many people are playing today? "))
 

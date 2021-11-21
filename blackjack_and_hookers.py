@@ -105,7 +105,6 @@ def get_cards(players_cards):
 
 #this is used to get the cards actual value to determine winner
 player_cards = get_cards(players)
-print(player_cards)
 
 def card_string(card_list):
     card_string = "You currently have the "
@@ -128,14 +127,12 @@ def hit(player):
     players[player].append(add_card)
 
 def find_winner(player_cards):
-    print(player_cards)
     player_sums = []
     for hand in player_cards:
         player_sums.append(sum(hand))
     return player_sums
 
 decision = input("Would you like to hit or stand? ").lower()
-print(decision)
 
 if decision == "hit":
     hit('player 1')

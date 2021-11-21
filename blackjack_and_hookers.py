@@ -114,11 +114,11 @@ def card_string(card_list):
     elif len(card_list) == 2:
         card_string += str(is_face(card_list[0])).capitalize() + " of " + str(find_suits(card_list[0])).capitalize() + " and " + str(is_face(card_list[1])).capitalize() + " of " + str(find_suits(card_list[1])).capitalize() + "."
     elif len(card_list) > 2:
-        for i in range(0, len(card_list)):
-            card_face = str(is_face(card_string[i])).capitalize()
-            card_suit = str(find_suits(card_string[i])).capitalize()
-            card_string += card_face + " of " + card_suit + " and, "
-        card_string += str(is_face(card_string[-1])).capitalize() + " of " + str(find_suits(card_list[-1])) +  "."
+        for i in range(0, len(card_list) - 1):
+            card_face = str(is_face(card_list[i])).capitalize()
+            card_suit = str(find_suits(card_list[i])).capitalize()
+            card_string += card_face + " of " + card_suit + ", "
+        card_string += "and " +str(is_face(card_list[-1])).capitalize() + " of " + str(find_suits(card_list[-1])).capitalize()+  "."
     return card_string
 
 print(card_string(players['player 1']))
@@ -141,24 +141,35 @@ if decision == "hit":
     hit('player 1')
     winner = find_winner(get_cards(players))
     print(card_string(players['player 1']))
-    print("Other players stand.")
-    again = input("Would you like to hit again?").lower()
-    if again == "yes":
-        hit('player 1')
-        winner = find_winner(get_cards(players))
+    input("Other players stand.")
     if winner[0] > 21:
         print("BUST! Try again.")
+    if winner[0] < 21:
+        again = input("Would you like to hit again? ").lower()
+        if again == "yes":
+            hit('player 1')
+            winner = find_winner(get_cards(players))
+            print(card_string(players['player 1']))
+        if winner[0] > 21:
+            print("BUST! Try again.")
     highest_hand = 0
     winning_player = ""
     for i in range(len(winner)):
-        if winner[i] > highest_hand:
+        if winner[i] > 21:
+            continue
+        elif winner[i] > highest_hand:
             highest_hand = winner[i]
-            winning_player = f"player {i}"
+            winning_player = f"player {i + 1}"
     print(f"{winning_player} wins with {highest_hand}!")
 else:
-    print(find_winner(player_cards))
-
-# find end result and display winner 
-# to-do
-# add ablility to hit, pass, double-down (computer is stuck with what it has, maybe some small AI like if total is less than 13 hit)
-# find end result and display winner 
+    winner = find_winner(get_cards(players))
+    highest_hand = 0
+    winning_player = ""
+    for i in range(len(winner)):
+        if winner[i] > 21:
+            continue
+        elif winner[i] > highest_hand:
+            highest_hand = winner[i]
+            winning_player = f"player {i + 1}"
+    input(f"{winning_player} wins with {highest_hand}!")
+input("Thanks for playing!")

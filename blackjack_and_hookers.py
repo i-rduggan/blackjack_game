@@ -136,6 +136,7 @@ for card in players['player 1']:
     string += str(is_face(card)) + " of " +  str(find_suits(card)) + " and "
 
 print(string)
-# test_hand = [[1,2,3,4,5,6,7,8,9,13],[14,15,16,17,18,19,20,21,22,26],[27,28,29,30,31,32,33,34,35,39],[40,41,42,43,44,45,46,47,48,52]] 
-# print(test_hand)
-# print(get_cards(players_cards))
+
+# to-do
+# add ablility to hit, pass, double-down (computer is stuck with what it has, maybe some small AI like if total is less than 13 hit)
+# find end result and display winner 

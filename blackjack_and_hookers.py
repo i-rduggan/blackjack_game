@@ -1,26 +1,22 @@
-import random
+##############################################
+#                                            #
+# Blackjack and Hookers                      #
+#                                            #
+##############################################
 
-class Player:
-    def __init__(self, cards = [], score = 0, chips = 200):
-        self.cards = cards
-        self.score = score
-        self.chips = chips
+import random
+import time
 
 card_suit = ["diamond", "club", "heart", "spade"]
-card_val = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-card_deck = {}
-for suit in card_suit:
-    card_deck[suit] = card_val
 
 print("Welcome to blackjack and hookers!")
 num_of_players = int(input("How many people are playing today? "))
 
-players = []
+players = {}
 for i in range(1, num_of_players + 1):
-    players.append(i)
+    players[f"player {i}"] = []
 
 cards = []
-
 for i in range(1,52*6+1):
     cards.append(i)
 
@@ -41,24 +37,57 @@ def card_calc(card):
         return card - 52 * 5
 
 def initial_deal():
-    players_cards = []
-    for player in players:
-        player_cards = []
-        card1 = cards.pop(random.randint(0,len(cards)-1))
-        card_calc1 = card_calc(card1)
-        player_cards.append(card_calc1)
-        card2 = cards.pop(random.randint(0,len(cards)-1))
-        card_calc2 = card_calc(card2)
-        player_cards.append(card_calc2)
-        players_cards.append(player_cards)
-    return players_cards
+    for player in players.keys():
+        card1 = card_calc(cards.pop(random.randint(0,len(cards)-1)))
+        card2 = card_calc(cards.pop(random.randint(0,len(cards)-1)))
+        players[player].append(card1)
+        players[player].append(card2)
 
-players_cards = initial_deal()
+print("Please wait while I deal the cards.")
+initial_deal()
+time.sleep(0.5)
+
+def find_suits(card):
+    if card >= 1 and card <= 13:
+        return "diamonds"
+    elif card > 13 and card <= 26:
+        return "clubs"
+    elif card > 26 and card <= 39:
+        return "hearts"
+    elif card > 39 and card <= 52:
+        return "spades"
+
+def convert_for_is_face(card):
+    if card >= 1 and card <= 13:
+        return card
+    elif card > 13 and card <= 26:
+        return card - 13
+    elif card > 26 and card <= 39:
+        return card - 13 * 2
+    elif card > 39 and card <= 52:
+        return card - 13 * 3
+    else:
+        return card
+
+def is_face(card):
+    new_card = convert_for_is_face(card)
+    if new_card > 9 and new_card <= 13:
+        if new_card == 10:
+            return "jack"
+        elif new_card == 11:
+            return "queen"
+        elif new_card == 12:
+            return "king"
+        elif new_card == 13:
+            return "ace"
+    else:
+        return new_card
+
 def get_cards(players_cards):
     temp_hands = []
-    for hand in players_cards:
+    for hand, card in players_cards.items():
         temp_hand = []
-        for card in hand:
+        for card in players_cards[hand]:
             val = 0
             # 1 - 9
             if card >= 1 and card <= 9:
@@ -74,7 +103,7 @@ def get_cards(players_cards):
             # 23 - 26
             elif card > 13 * 2 - 4 and card <= 13 * 2:
                 val = 10
-                temp_hand.append(val)   
+                temp_hand.append(val)
             # 27 - 35
             elif card <= 13 * 3 - 4:
                 val = card - (13 * 2)
@@ -93,6 +122,15 @@ def get_cards(players_cards):
                 temp_hand.append(val)
         temp_hands.append(temp_hand)
     return temp_hands
-test_hand = [[1,2,3,4,5,6,7,8,9,13],[14,15,16,17,18,19,20,21,22,26],[27,28,29,30,31,32,33,34,35,39],[40,41,42,43,44,45,46,47,48,52]] 
-#print(test_hand)
-print(get_cards(players_cards))
+
+player_cards = get_cards(players)
+
+string = "You currently have "
+
+for card in players['player 1']:
+    string += str(is_face(card)) + " of " +  str(find_suits(card)) + " and "
+
+print(string)
+# test_hand = [[1,2,3,4,5,6,7,8,9,13],[14,15,16,17,18,19,20,21,22,26],[27,28,29,30,31,32,33,34,35,39],[40,41,42,43,44,45,46,47,48,52]] 
+# print(test_hand)
+# print(get_cards(players_cards))

@@ -10,16 +10,19 @@ import time
 print("Welcome to blackjack and hookers!")
 num_of_players = int(input("How many people are playing today? "))
 
+#instantiate the players
 players = {}
 for i in range(1, num_of_players + 1):
     players[f"player {i}"] = []
 
+#instantiate the cards (6 decks, input can change later)
 cards = []
 for i in range(1,52*6+1):
     cards.append(i)
 
 round_counter = 0
 
+#make sure all cards used are actually between 1 and 52
 def card_calc(card):
     if card >= 1 and card <= 52:
         return card
@@ -34,6 +37,7 @@ def card_calc(card):
     else:
         return card - 52 * 5
 
+# make it so that it goes round twice instead of both cards at once maybe counter = 0 with while loop
 def initial_deal():
     for player in players.keys():
         card1 = card_calc(cards.pop(random.randint(0,len(cards)-1)))
@@ -45,6 +49,7 @@ print("Please wait while I deal the cards.")
 initial_deal()
 time.sleep(0.5)
 
+# this section deals with identifying cards for the player (who is always player 1)
 def find_suits(card):
     if card >= 1 and card <= 13:
         return "diamonds"
@@ -81,6 +86,7 @@ def is_face(card):
     else:
         return new_card
 
+#bit of a misnomer here, it's actually getting card values because all face cards are worth 10
 def get_cards(players_cards):
     temp_hands = []
     for hand, card in players_cards.items():
@@ -121,6 +127,7 @@ def get_cards(players_cards):
         temp_hands.append(temp_hand)
     return temp_hands
 
+#this is used to get the cards actual value to determine winner
 player_cards = get_cards(players)
 
 string = "You currently have "
